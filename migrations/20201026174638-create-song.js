@@ -1,4 +1,7 @@
 "use strict";
+
+const { genres } = require("../models/genre");
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("Songs", {
@@ -12,10 +15,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(50),
       },
-      category: {
-        type: Sequelize.INTEGER,
+      genre: {
+        allowNull: false,
+        type: Sequelize.ENUM(genres),
       },
       creatorId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       songUrl: {

@@ -1,6 +1,6 @@
 "use strict";
 
-const category = require("./category");
+const genres = require("./genres");
 const user = require("./user");
 
 module.exports = (sequelize, DataTypes) => {
@@ -11,24 +11,24 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      category: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: category,
-        },
+      genre: {
+        allowNull: false,
+        type: DataTypes.ENUM(genres),
       },
       creatorId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: user,
         },
       },
-      songUrl: DataTypes.STRING,
+      songUrl: DataTypes.STRING(200),
     },
     {}
   );
   Song.associate = function (models) {
-    // associations can be defined here
+    Song.belongsTo(models.User, { foreignKey: "creatorId", as: "creator" });
+    Song.hasMany(models.Comment, { foreignKey: "songId", as: "comments" });
   };
   return Song;
 };

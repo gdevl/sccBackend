@@ -1,13 +1,35 @@
-'use strict';
+"use strict";
+
+const user = require("./user");
+
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define('Comment', {
-    songId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
-    commentText: DataTypes.STRING,
-    timeStamp: DataTypes.STRING
-  }, {});
-  Comment.associate = function(models) {
-    // associations can be defined here
+  const Comment = sequelize.define(
+    "Comment",
+    {
+      songId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: user,
+        },
+      },
+      commentText: {
+        allowNull: false,
+        type: DataTypes.STRING(200),
+      },
+      timeStamp: {
+        allowNull: false,
+        type: DataTypes.STRING(50),
+      },
+    },
+    {}
+  );
+  Comment.associate = function (models) {
+    Comment.belongsTo(models.User, { foreignKey: "userId", as: "author" });
   };
   return Comment;
 };
